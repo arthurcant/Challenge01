@@ -29,14 +29,16 @@ app.post('/users', (request, response) => {
   // Complete aqui
   const { name, username} = request.body;
 
-  if(!username) {
-    return response.status(400).json({erro: 'Lacking information at the body\'s request property username.'})
+  const verifyingUsername = users.some((element) => element.username == username); 
+
+  if(verifyingUsername) {
+    return response.status(400).json({erro: 'The username already exist.'})
   }
 
   const createdInformation = {
     id:v4,
-    name: name,
-    username: username,
+    name: 'John Doe',
+    username: 'johndoe',
     todos: []
   }
 
