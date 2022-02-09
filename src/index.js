@@ -108,21 +108,18 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
     return response.status(404).json({error: 'Mensagem do erro'});
   }
 
-  if(!done) {
-    done = true;
-  }
-
   const positionUser = users.findIndex((element) => element.username === usernome);
   const userKey = users[positionUser].todos.findIndex((element) => element.id === id);
 
-  if(userKey == -1) {
+  if(positionUser > -1) {
+    if(!(userKey > -1))
     return response.status(404).json({error: 'Mensagem do erro'});
   }
-
-  if(done){
+  
+  if(done == false){
+    done = true;
     users[positionUser].todos[userKey].done = done;
   }
-  users[positionUser].todos[userKey].done = true;
   
 });
 
@@ -130,15 +127,15 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   const { username } = request.headers;
   const { id } = request.params;
 
-  const positionUser = users.findIndex((element) => element.username == username);
   
-  if(!positionUser) {
-    return response.status(400).json({erro: 'UserName wasn\'t found'});
+  if(!username) {
+    return response.status(404).json({error: 'Mensagem do erro'})
   }
-
+  
+  const positionUser = users.findIndex((element) => element.username == username);
   const userKey = users[positionUser].todos.findIndex((element) => element.id === id);
 
-  if(!userKey){
+  if(userKey == -1){
     return response.status(404).json({error: 'Mensagem do erro'})
   }
 
